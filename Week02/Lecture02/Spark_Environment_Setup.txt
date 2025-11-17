@@ -1,0 +1,86 @@
+I. Cài đặt môi trường cho Spark với Python (pyspark) trên máy local 
+1. Cài đặt Spark và Python theo hướng dẫn sau:
+	https://www.datacamp.com/community/tutorials/installation-of-pyspark
+
+2. Cài đặt môi trường cho Spark với Jupyter notebook/lab trên máy local
+	2.1. Cài đặt findspark
+		conda install -c conda-forge findspark (nếu dùng Python của Anaconda), hoặc
+		pip install findspark (nếu dùng Python gốc)
+
+	2.1 Thử dùng Jupyter notebook kết nối với Spark
+	Mở jupyter notebook, tạo một cell và thực hiện đoạn mã sau.
+		import findspark
+		findspark.init()
+​
+		import findspark
+		findspark.init()
+
+		import pyspark
+		findspark.find()
+
+		from pyspark.sql import SparkSession
+		from pyspark.sql.functions import count
+
+		spark = (SparkSession
+			  .builder
+			  .appName("test")
+			  .getOrCreate())
+
+		strings = spark.read.text("path/to/a/text/file/filename.txt")
+		strings.count()
+
+		filtered = strings.filter(strings.value.contains("Spark"))
+		filtered.count()
+
+
+
+
+II. Cài đặt Spark với Python trên Google Colab
+Đăng nhập vào Google Drive, Chọn New -> More -> Google Colaboratory. Sử dụng các lệnh sau để cài đặt và test Spark với Google Colab.
+
+# install Java8 (Spark không tương thích tốt với các phiên bản Java khác)
+!apt-get install openjdk-8-jdk-headless -qq > /dev/null
+
+# download Spark (ví dụ với spark-3.1.2)
+!wget -q https://archive.apache.org/dist/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
+
+
+# unzip it
+!tar xf spark-3.1.2-bin-hadoop3.2.tgz
+
+# install findspark 
+!pip install -q findspark
+
+
+# Set Environment Variables
+import os
+os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"
+os.environ["SPARK_HOME"] = "/content/spark-3.1.2-bin-hadoop3.2"
+
+
+# Quick Installation Test
+import findspark
+findspark.init()
+
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.master("local[*]").getOrCreate()
+# Test the spark
+df = spark.createDataFrame([{"hello": "world"} for x in range(100)])
+df.show(3, False)
+
+# Check the pyspark version
+import pyspark
+print(pyspark.__version__)
+
+
+
+
+III. Dùng Spark với Databricks Community Edition
+1. Đăng ký một tài khoản Community Edition với Databricks
+	https://databricks.com/try-databricks
+
+2. Matei Zaharia, Making Big Data Processing Simple with Spark, ACM Techtalks, December 17, 2015, https://www.youtube.com/watch?v=d9D-Z3-44F8
+
+3. https://databricks.com/spark/getting-started-with-apache-spark
+
+4. EdX CS100.1x, Introduction to Big Data with Apache Spark, https://www.youtube.com/watch?v=2pYnAoqu428&list=PLy8rR4qeciOfumPMgluuLYVN9TopVGhJw
